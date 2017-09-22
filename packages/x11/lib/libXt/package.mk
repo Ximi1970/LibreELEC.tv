@@ -40,5 +40,6 @@ pre_make_target() {
   make -C util CC=$HOST_CC \
                CFLAGS="$HOST_CFLAGS " \
                LDFLAGS="$HOST_LDFLAGS" \
+               XT_CFLAGS="$HOST_CFLAGS " \
                makestrs
 }
