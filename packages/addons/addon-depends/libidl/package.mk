@@ -33,3 +33,5 @@ PKG_SOURCE_DIR="libIDL-$PKG_VERSION"
 
 PKG_IS_ADDON="no"
 PKG_AUTORECONF="no"
+
+PKG_CONFIGURE_OPTS_TARGET="libIDL_cv_long_long_format=ll"
