@@ -1,20 +1,5 @@
-################################################################################
-#      This file is part of LibreELEC - https://libreelec.tv
-#      Copyright (C) 2017-present Team LibreELEC
-#
-#  LibreELEC is free software: you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation, either version 2 of the License, or
-#  (at your option) any later version.
-#
-#  LibreELEC is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
-#
-#  You should have received a copy of the GNU General Public License
-#  along with LibreELEC.  If not, see <http://www.gnu.org/licenses/>.
-################################################################################
+# SPDX-License-Identifier: GPL-2.0-or-later
+# Copyright (C) 2017-present Team LibreELEC (https://libreelec.tv)
 
 import os
 import stat
@@ -25,9 +10,9 @@ import xbmc
 import xbmcaddon
 import xbmcgui
 
+
 PORT = '6666'
 SINK = 'librespot_sink'
-
 
 def suspendSink(bit):
    subprocess.call(['pactl', 'suspend-sink', SINK, bit])
@@ -38,7 +23,7 @@ def systemctl(command):
 
 class Controller(threading.Thread):
 
-   FIFO = os.path.join(xbmcaddon.Addon().getAddonInfo('path'), 'rc')
+   FIFO = '/var/run/librespot'
 
    def __init__(self, player):
       super(Controller, self).__init__()
@@ -65,12 +50,16 @@ class Controller(threading.Thread):
                self.player.play()
             elif command[0] == 'stop':
                self.player.stop()
-
-   def stop(self):
+            elif command[0] == 'pause':
+               self.player.pause()
       try:
          os.unlink(self.FIFO)
       except OSError:
          pass
+
+   def stop(self):
+      with open(self.FIFO, 'w') as fifo:
+         fifo.close()
 
 
 class Player(xbmc.Player):
@@ -79,7 +68,6 @@ class Player(xbmc.Player):
 
    def __init__(self):
       super(Player, self).__init__(self)
-      self.window = xbmcgui.Window(12006)
       if self.isPlaying():
          self.onPlayBackStarted()
 
@@ -101,10 +89,15 @@ class Player(xbmc.Player):
       if not self.isPlaying() and xbmcaddon.Addon().getSetting('ls_O') == 'Kodi':
          suspendSink('0')
          listitem = xbmcgui.ListItem(xbmcaddon.Addon().getAddonInfo('name'))
+         listitem.addStreamInfo('audio',{'codec': 'mp3'})
          listitem.setArt({'thumb': xbmcaddon.Addon().getAddonInfo('icon')})
          super(Player, self).play(self.ITEM, listitem)
          del listitem
-         self.window.show()
+         xbmcgui.Window(12006).show()
+
+   def pause(self):
+      if self.isPlaying() and self.getPlayingFile() == self.ITEM:
+         super(Player, self).pause()
 
    def stop(self):
       suspendSink('1')
@@ -130,3 +123,4 @@ if __name__ == '__main__':
    controller.start()
    Monitor(player).waitForAbort()
    controller.stop()
+   controller.join()

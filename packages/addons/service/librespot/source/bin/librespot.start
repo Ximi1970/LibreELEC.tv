@@ -1,21 +1,7 @@
 #!/bin/sh
-################################################################################
-#      This file is part of LibreELEC - https://libreelec.tv
-#      Copyright (C) 2017-present Team LibreELEC
-#
-#  LibreELEC is free software: you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation, either version 2 of the License, or
-#  (at your option) any later version.
-#
-#  LibreELEC is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
-#
-#  You should have received a copy of the GNU General Public License
-#  along with LibreELEC.  If not, see <http://www.gnu.org/licenses/>.
-################################################################################
+
+# SPDX-License-Identifier: GPL-2.0-or-later
+# Copyright (C) 2017-present Team LibreELEC (https://libreelec.tv)
 
 activate_card() {
   if [ -e "/proc/asound/$1" ]; then
@@ -87,8 +73,7 @@ oe_setup_addon service.librespot
 LIBRESPOT="librespot --cache \"$ADDON_HOME/cache\" \
                      --disable-audio-cache \
                      --name \"Librespot@$HOSTNAME\" \
-                     --onstart librespot.onstart \
-                     --onstop librespot.onstop"
+                     --onevent librespot.onevent"
 
 if [ -n "$ls_b" -a "$ls_b" != "-" ]; then
   LIBRESPOT="$LIBRESPOT --bitrate $ls_b"
@@ -119,6 +104,6 @@ if [ -z "$(pactl list short modules | grep source=$LS_SINK.monitor)" ]; then
     destination_ip=127.0.0.1 port="$LS_PORT" source_ip=127.0.0.1 > /dev/null
 fi
 
-export LS_FIFO="$ADDON_DIR/rc"
+export LS_FIFO="/var/run/librespot"
 
 eval $LIBRESPOT

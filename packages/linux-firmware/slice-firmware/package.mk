@@ -1,20 +1,5 @@
-################################################################################
-#      This file is part of LibreELEC - https://libreelec.tv
-#      Copyright (C) 2016-present Team LibreELEC
-#
-#  LibreELEC is free software: you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation, either version 2 of the License, or
-#  (at your option) any later version.
-#
-#  LibreELEC is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
-#
-#  You should have received a copy of the GNU General Public License
-#  along with LibreELEC.  If not, see <http://www.gnu.org/licenses/>.
-################################################################################
+# SPDX-License-Identifier: GPL-2.0-or-later
+# Copyright (C) 2016-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="slice-firmware"
 PKG_VERSION="0f463cc"
@@ -27,19 +12,17 @@ PKG_DEPENDS_TARGET="toolchain dtc:host"
 PKG_SECTION="linux-firmware"
 PKG_SHORTDESC="BCM270x firmware related stuff for Slice"
 PKG_LONGDESC="BCM270x firmware related stuff for Slice"
-
-PKG_IS_ADDON="no"
-PKG_AUTORECONF="no"
+PKG_TOOLCHAIN="manual"
 
 make_target() {
   if [ "$DEVICE" = "Slice3" ]; then
-    dtc -O dtb -I dts -o dt-blob.bin slice3-dt-blob.dts
+    $(kernel_path)/scripts/dtc/dtc -O dtb -I dts -o dt-blob.bin slice3-dt-blob.dts
   elif [ "$DEVICE" = "Slice" ]; then
-    dtc -O dtb -I dts -o dt-blob.bin slice-dt-blob.dts
+    $(kernel_path)/scripts/dtc/dtc -O dtb -I dts -o dt-blob.bin slice-dt-blob.dts
   fi
 }
 
 makeinstall_target() {
   mkdir -p $INSTALL/usr/share/bootloader/
-    cp -a dt-blob.bin $INSTALL/usr/share/bootloader/
+    cp -a $PKG_BUILD/dt-blob.bin $INSTALL/usr/share/bootloader/
 }

@@ -1,34 +1,19 @@
-################################################################################
-#      This file is part of LibreELEC - https://libreelec.tv
-#      Copyright (C) 2016 Team LibreELEC
-#
-#  LibreELEC is free software: you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation, either version 2 of the License, or
-#  (at your option) any later version.
-#
-#  LibreELEC is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
-#
-#  You should have received a copy of the GNU General Public License
-#  along with LibreELEC.  If not, see <http://www.gnu.org/licenses/>.
-################################################################################
+# SPDX-License-Identifier: GPL-2.0-or-later
+# Copyright (C) 2016-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="net-snmp"
-PKG_VERSION="5.7.3"
-PKG_SHA256="12ef89613c7707dc96d13335f153c1921efc9d61d3708ef09f3fc4a7014fb4f0"
-PKG_REV="102"
+PKG_VERSION="5.8"
+PKG_SHA256="b2fc3500840ebe532734c4786b0da4ef0a5f67e51ef4c86b3345d697e4976adf"
+PKG_REV="106"
 PKG_ARCH="any"
 PKG_LICENSE="BSD"
 PKG_SITE="http://www.net-snmp.org"
-PKG_URL="http://sourceforge.net/projects/net-snmp/files/$PKG_NAME/$PKG_VERSION/$PKG_NAME-$PKG_VERSION.tar.gz"
-PKG_DEPENDS_TARGET="toolchain libnl"
+PKG_URL="https://sourceforge.net/projects/net-snmp/files/$PKG_NAME/$PKG_VERSION/$PKG_NAME-$PKG_VERSION.tar.gz"
+PKG_DEPENDS_TARGET="toolchain libnl openssl"
 PKG_SECTION="service"
 PKG_SHORTDESC="Simple Network Management Protocol utilities."
 PKG_LONGDESC="Simple Network Management Protocol (SNMP) is a widely used protocol for monitoring the health and welfare of network equipment."
-PKG_AUTORECONF="yes"
+PKG_TOOLCHAIN="autotools"
 
 PKG_IS_ADDON="yes"
 PKG_ADDON_NAME="Net-SNMP"
@@ -41,9 +26,8 @@ PKG_CONFIGURE_OPTS_TARGET="--with-defaults \
         --disable-deprecated \
         --disable-snmptrapd-subagent \
         --disable-scripts \
-        --enable-static=no \
-        --enable-shared=yes \
-        --enable-mini-agent \
+        --enable-static=yes \
+        --enable-shared=no \
         --with-nl \
         --with-logfile=/storage/.kodi/userdata/addon_data/${PKG_ADDON_ID} \
         --with-persistent-directory=/storage/.kodi/userdata/addon_data/${PKG_ADDON_ID} \
@@ -68,9 +52,4 @@ makeinstall_target() {
 addon() {
   mkdir -p $ADDON_BUILD/$PKG_ADDON_ID/lib
   cp -r $PKG_BUILD/.$TARGET_NAME/storage/.kodi/addons/${PKG_ADDON_ID}/bin $PKG_BUILD/.$TARGET_NAME/storage/.kodi/userdata/addon_data/${PKG_ADDON_ID}/share $ADDON_BUILD/$PKG_ADDON_ID/
-  #Do not copy symlinks
-  find $PKG_BUILD/.$TARGET_NAME/storage/.kodi/addons/${PKG_ADDON_ID}/lib/ -type f -name '*.so.*' -exec cp '{}' $ADDON_BUILD/$PKG_ADDON_ID/lib/ \;
-  #remove all but major version from so file
-  for f in $ADDON_BUILD/$PKG_ADDON_ID/lib/*.so.* ; do mv "$f" "${f%.*.*}" ; done
 }
-

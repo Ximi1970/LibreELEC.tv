@@ -1,20 +1,5 @@
-################################################################################
-#      This file is part of OpenELEC - http://www.openelec.tv
-#      Copyright (C) 2009-2016 Stephan Raue (stephan@openelec.tv)
-#
-#  OpenELEC is free software: you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation, either version 2 of the License, or
-#  (at your option) any later version.
-#
-#  OpenELEC is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
-#
-#  You should have received a copy of the GNU General Public License
-#  along with OpenELEC.  If not, see <http://www.gnu.org/licenses/>.
-################################################################################
+# SPDX-License-Identifier: GPL-2.0-or-later
+# Copyright (C) 2009-2016 Stephan Raue (stephan@openelec.tv)
 
 PKG_NAME="xmlstarlet"
 PKG_VERSION="1.6.1"
@@ -28,7 +13,6 @@ PKG_DEPENDS_TARGET="toolchain libxml2 libxslt"
 PKG_SECTION="tools"
 PKG_SHORTDESC="XMLStarlet is a command-line XML utility which allows the modification and validation of XML documents"
 PKG_LONGDESC="XMLStarlet is a command line XML toolkit which can be used to transform,query, validate, and edit XML documents and files using  simple set of shellcommands in similar way it is done for plain text files  using grep/sed/awk/tr/diff/patch."
-PKG_AUTORECONF="no"
 
 PKG_CONFIGURE_OPTS_HOST="  ac_cv_func_malloc_0_nonnull=yes \
                            ac_cv_func_realloc_0_nonnull=yes \
