@@ -22,21 +22,9 @@ PKG_CONFIGURE_OPTS_TARGET="--enable-static \
                            --disable-xvmc"
 
 pre_configure_target() {
-<<<<<<< HEAD
-  PYTHON_VER_SHORT=`python --version 2>&1 | cut -d' ' -f2 | cut -d'.' -f1,2`
-  
-  PYTHON_LIBDIR="$SYSROOT_PREFIX/usr/lib/python$PYTHON_VER_SHORT"
-  PYTHON_TOOLCHAIN_PATH="$PYTHON_LIBDIR/site-packages"
-
-  PKG_CONFIG="$PKG_CONFIG --define-variable=pythondir=$PYTHON_TOOLCHAIN_PATH"
-  PKG_CONFIG="$PKG_CONFIG --define-variable=xcbincludedir=$SYSROOT_PREFIX/usr/share/xcb"
-  
-  CFLAGS="$CFLAGS -fPIC -DPIC"
-=======
   PYTHON_LIBDIR=$SYSROOT_PREFIX/usr/lib/$PKG_PYTHON_VERSION
   PYTHON_TOOLCHAIN_PATH=$PYTHON_LIBDIR/site-packages
 
   PKG_CONFIG="$PKG_CONFIG --define-variable=pythondir=$PYTHON_TOOLCHAIN_PATH"
   PKG_CONFIG="$PKG_CONFIG --define-variable=xcbincludedir=$SYSROOT_PREFIX/usr/share/xcb"
->>>>>>> master
 }
